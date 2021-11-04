@@ -1,0 +1,16 @@
+#bookcase {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.book {
+    width: 22%;
+    height: 20%;
+    padding: 8px;
+    background-color: black;
+    color: gold;
+}

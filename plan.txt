@@ -1,0 +1,9 @@
+Get book info from user after they click button
+User fills out form, extrapolate data from form
+
+
+For each book object create a new div
+edit text content of div, use values from object
+set its class
+append it to the bookcase
+
