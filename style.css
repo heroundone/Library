@@ -4,6 +4,7 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+    margin-top: 10px;
     gap: 15px;
 }
 
@@ -13,4 +14,18 @@
     padding: 8px;
     background-color: black;
     color: gold;
+}
+
+#newBook {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#form {
+    display: none;
+    text-align: center;
+}
+
+input {
+    margin: 3px;
 }

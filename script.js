@@ -1,9 +1,11 @@
+// array for containing all book objects
 myLibrary = [];
 
 /* variable that will help keep track of the index of each book in the array, 
 it will be incremented each time a book is added */
 let position = 1;
 
+// constructor for new book object
 function book(title, author, pageCount, read) {
     this.title = title;
     this.author = author;
@@ -11,14 +13,26 @@ function book(title, author, pageCount, read) {
     this.read = read;
 };
 
+
+// event listener for new book button, makes form appear
+document.querySelector('#newBook button').addEventListener('click', () => {
+    let info = document.getElementById('form');
+    info.setAttribute('style', 'display:block;');
+});
+
+// event listeners for submit and cancel buttons within add new book form
+
+
 // !!!! maybe have function for displaying initial books in library if there are any !!!!
 
 
 // function that runs when 'add new book' button is clicked, prompts user for book info
 function getBookInfo() {
-    // prompt user, store info in variables
+    /* prompt user, multiple input values with placeholder text, need confirm and cancel buttons
+    TRY IN HTML FIRST, store info in variables */
 
-    // call constructor function to create new book object
+
+    // call constructor function to create new book object, called by confirm button
 
     // push new object onto 'mylibrary' array
 
@@ -36,6 +50,6 @@ function addBookToLibrary() {
 
     // also need to append buttons for changing read status and removing book, add 'data-key'
 
-    // increment position variable at end
-
+    // increment position variable
+    position++;
 };
