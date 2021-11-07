@@ -2,7 +2,7 @@
 myLibrary = [];
 
 /* variable that will help keep track of the index of each book in the array, 
-it will be incremented each time a book is added */
+it will be incremented up each time a book is added and down when removed*/
 let position = 0;
 
 // constructor for new book object
@@ -12,6 +12,18 @@ function book(title, author, pageCount, read) {
     this.pageCount = pageCount;
     this.read = read;
 };
+
+book.prototype.changeReadStatus = function() {
+    if (this.read === 'yes') {
+        this.read = 'no';
+    }
+    else {
+        this.read = 'yes';
+    }
+    // change read status on the web page now
+    let readStatus = document.querySelector(`#${this.title} .read`)
+    readStatus.textContent = this.read;
+}
 
 
 // event listener for new book button, makes form appear
@@ -51,12 +63,20 @@ function addBookToLibrary(newBook) {
     let newBookDiv = document.createElement('div');
     // add data attribute and class, then add to array
     newBookDiv.setAttribute('data-key', `${position}`);
+    let title = getTitle(position);
+    newBookDiv.setAttribute('id', `${title}`);
     newBookDiv.classList.add('book');
     // populate div with info from object
+    let i = 0;
+    const properties = Object.keys(newBook);
     for(const key in newBook) {
+        if(i != properties.length) {
         let newDiv = document.createElement('div');
         newDiv.textContent = newBook[key];
+        newDiv.classList.add(`${key}`);
         newBookDiv.appendChild(newDiv);
+        i++
+        }
     }
     // set up buttons for changing read status and removing book, add 'data-key' attribute
     let newSpan = document.createElement('span');
@@ -68,6 +88,7 @@ function addBookToLibrary(newBook) {
 
     let readStatusButton = document.createElement('button');
     readStatusButton.setAttribute('data-key', `${position}`);
+    readStatusButton.addEventListener('click', (e) => getBook(e));
     readStatusButton.textContent = 'Mark as Read/Unread';
 
     newSpan.appendChild(removeButton);
@@ -102,3 +123,16 @@ function removeBook(event) {
         i++
     });
 };
+
+function getBook(event) {
+    parent = event.target.parentNode.parentNode;
+    indexOfBook = parent.getAttribute('data-key');
+    theBook = myLibrary[indexOfBook];
+    theBook.changeReadStatus();
+}
+
+function getTitle(index) {
+    theBook = myLibrary[index];
+    title = theBook.title;
+    return title
+}
