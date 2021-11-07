@@ -14,14 +14,17 @@ function book(title, author, pageCount, read) {
 };
 
 book.prototype.changeReadStatus = function() {
-    if (this.read === 'yes') {
-        this.read = 'no';
+    if (this.read === 'read: yes') {
+        this.read = 'read: no';
     }
     else {
-        this.read = 'yes';
+        this.read = 'read: yes';
     }
     // change read status on the web page now
-    let readStatus = document.querySelector(`#${this.title} .read`)
+    let title = this.title
+    let alteredTitle = title.replaceAll(' ', '');
+    let readStatus = document.querySelector(`.${alteredTitle} .read`)
+    console.log(readStatus);
     readStatus.textContent = this.read;
 }
 
@@ -42,9 +45,9 @@ document.querySelector('#submitButton').addEventListener('click', () => {
     document.querySelector('#title').value = '';
     let author = document.querySelector('#author').value;
     document.querySelector('#author').value = '';
-    let pageCount = document.querySelector('#page').value;
+    let pageCount = document.querySelector('#page').value + ' pages';
     document.querySelector('#page').value = '';
-    let read = document.querySelector('#read').value;
+    let read = 'read: ' + document.querySelector('#read').value;
     document.querySelector('#read').value = '';
     // create new book object
     let newBook = new book(title, author, pageCount, read);
@@ -64,7 +67,8 @@ function addBookToLibrary(newBook) {
     // add data attribute and class, then add to array
     newBookDiv.setAttribute('data-key', `${position}`);
     let title = getTitle(position);
-    newBookDiv.setAttribute('id', `${title}`);
+    let alteredTitle = title.replaceAll(' ', '');
+    newBookDiv.classList.add(alteredTitle);
     newBookDiv.classList.add('book');
     // populate div with info from object
     let i = 0;
