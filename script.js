@@ -14,6 +14,7 @@ function book(title, author, pageCount, read) {
 };
 
 book.prototype.changeReadStatus = function() {
+    // change read status within the book object
     if (this.read === 'read: yes') {
         this.read = 'read: no';
     }
@@ -24,8 +25,10 @@ book.prototype.changeReadStatus = function() {
     let title = this.title
     let alteredTitle = title.replaceAll(' ', '');
     let readStatus = document.querySelector(`.${alteredTitle} .read`)
-    console.log(readStatus);
     readStatus.textContent = this.read;
+
+    // update local storage
+    localStorage.setItem(title, JSON.stringify(theBook));
 }
 
 
@@ -53,13 +56,41 @@ document.querySelector('#submitButton').addEventListener('click', () => {
     let newBook = new book(title, author, pageCount, read);
     // hide new book form
     document.getElementById('form').style.display = 'none';
-    // add new object to mylibrary array
+    // add new object to mylibrary array and put them in local storage
     myLibrary.push(newBook);
+    localStorage.setItem(`${title}`, JSON.stringify(newBook));
     addBookToLibrary(newBook);
 })
 
-// !!!! maybe have function for displaying initial books in library if there are any !!!!
+/* use local storage, when page is loaded check if local storage contains anything
+if it does populate the page with the books contained within
+else do nothing
+*/
+function displayBooks() {
+    for(let key in localStorage) {
+        retrievedBook = JSON.parse(localStorage.getItem(key));
+        if(retrievedBook != null) {
+            // use retrievedBook to construct a new book object, need new constructor 
+            // to readd methods to the recovered objects
+            function recoveredBook(title, author, pageCount, read) {
+                this.title = title;
+                this.author = author;
+                this.pageCount = pageCount;
+                this.read = read;
+            }
+            recoveredBook.prototype = Object.create(book.prototype);
 
+            title = retrievedBook['title'];
+            author = retrievedBook['author'];
+            pageCount = retrievedBook['pageCount'];
+            read = retrievedBook['read'];
+            let thisBook = new recoveredBook(title, author, pageCount, read);
+            
+            myLibrary.push(thisBook);
+            addBookToLibrary(thisBook);
+        };
+    };
+};
 
 function addBookToLibrary(newBook) {
     // create div element for new book
@@ -115,7 +146,11 @@ function removeBook(event) {
     indexOfBook = parent.getAttribute('data-key');
     parent.remove();
 
-    // remove the book from both arrays
+    // remove the book from local storage and both arrays 
+    objectToDelete = myLibrary[indexOfBook];
+    title = objectToDelete['title'];
+    localStorage.removeItem(title);
+
     myLibrary.splice(indexOfBook, 1);
     bookDivs.splice(indexOfBook, 1);
     position--;
@@ -140,3 +175,9 @@ function getTitle(index) {
     title = theBook.title;
     return title
 }
+
+// check to see if there are books in local storage if so display them on the page
+console.log(localStorage);
+if(localStorage.length) {
+    displayBooks();
+};
