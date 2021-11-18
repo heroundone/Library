@@ -5,22 +5,23 @@ myLibrary = [];
 it will be incremented up each time a book is added and down when removed*/
 let position = 0;
 
-// constructor for new book object
-function book(title, author, pageCount, read) {
-    this.title = title;
-    this.author = author;
-    this.pageCount = pageCount;
-    this.read = read;
-};
+// Class for new book object
+class book {
+    constructor(title, author, pageCount, read) {
+        this.title = title;
+        this.author = author;
+        this.pageCount = pageCount;
+        this.read = read;
+    };
 
-book.prototype.changeReadStatus = function() {
+    changeReadStatus() {
     // change read status within the book object
     if (this.read === 'read: yes') {
         this.read = 'read: no';
     }
     else {
         this.read = 'read: yes';
-    }
+    };
     // change read status on the web page now
     let title = this.title
     let alteredTitle = title.replaceAll(' ', '');
@@ -29,7 +30,8 @@ book.prototype.changeReadStatus = function() {
 
     // update local storage
     localStorage.setItem(title, JSON.stringify(theBook));
-}
+    };
+};
 
 
 // event listener for new book button, makes form appear
@@ -72,14 +74,12 @@ function displayBooks() {
         if(retrievedBook != null) {
             // use retrievedBook to construct a new book object, need new constructor 
             // to readd methods to the recovered objects
-            function recoveredBook(title, author, pageCount, read) {
-                this.title = title;
-                this.author = author;
-                this.pageCount = pageCount;
-                this.read = read;
-            }
-            recoveredBook.prototype = Object.create(book.prototype);
-
+            class recoveredBook extends book {
+                constructor(title, author, pageCount, read) {
+                    super(title, author, pageCount, read);
+                };
+            };
+            
             title = retrievedBook['title'];
             author = retrievedBook['author'];
             pageCount = retrievedBook['pageCount'];
